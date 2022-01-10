@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react'
 //import {fetchProducts, addProduct, editProduct} from 'services/products'
-import {fetchProducts, addProduct} from 'services/productsFirebase'
+import {fetchProducts, addProduct, editProduct} from 'services/productsFirebase'
 import {Container} from 'components/Container'
 import {Card} from 'components/Card'
 import {Form} from 'components/Form'
@@ -69,8 +69,8 @@ export const Products = () => {
       addProduct(product)
         .then(setProducts)
     } else {
-      //editProduct(product.id, product)
-        //.then(res => setProducts(res))
+      editProduct(product.id, product)
+        .then(setProducts)
       setEditMode(false)
     }
     setProduct(productInitialState)

@@ -1,5 +1,5 @@
 import {bd} from 'services/firebase'
-import {collection, addDoc, getDocs} from 'firebase/firestore'
+import {collection, addDoc, getDocs, doc, setDoc} from 'firebase/firestore'
 
 export const fetchProducts = async () => {
   try {
@@ -19,5 +19,15 @@ export const addProduct = async (data) => {
     return await fetchProducts()
   } catch (e) {
     console.error('error add product', e)
+  }
+}
+
+export const editProduct = async (id, data) => {
+  try {
+    const dooRef = doc(bd, 'products', id)
+    await setDoc(dooRef, data)
+    return await fetchProducts()
+  } catch (e) {
+    console.error(e)
   }
 }
