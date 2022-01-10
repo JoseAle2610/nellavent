@@ -28,6 +28,13 @@ const products = [
 export const fetchProducts = () => Promise.resolve(products)
 
 export const addProduct = (newProduct) => {
+  newProduct.id = Math.max.apply(null, products.map(e => e.id)) + 1
   products.push(newProduct)
+  return Promise.resolve(products)
+}
+
+export const editProduct = (id, data) => {
+  let productIndex = products.findIndex(e => e.id === id)
+  products[productIndex] = data
   return Promise.resolve(products)
 }

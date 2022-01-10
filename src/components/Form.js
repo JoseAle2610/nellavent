@@ -12,7 +12,7 @@ const FormContainer = styled.form`
 
 export const Form = (props) => {
   return (
-    <FormContainer d={props.d}>
+    <FormContainer d={props.d} onSubmit={props.onSubmit}>
       <h5>{props.title}</h5>
       {props.children}
     </FormContainer>
@@ -21,5 +21,6 @@ export const Form = (props) => {
 
 Form.defaultProps = {
   d: 'block',
-  title: 'Form'
+  onSubmit: e => e.preventDefault(),
+  title: 'Form',
 }

@@ -8,6 +8,7 @@ export const Input = styled.input`
   padding: .5em;
   color: ${props => props.theme.light};
   &:focus {
-    box-shadow: 0 0 5px rgba(230, 230, 230, .1);
+    box-shadow: 0 0 5px rgba(230, 230, 230, .2);
+    border: none;
   }
 `

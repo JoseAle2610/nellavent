@@ -16,31 +16,12 @@ export const Button = styled.button`
   font-weight: 500;
   background-color: var(--color);
   color: ${props => props.theme.light};
-  &:before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    background: ${(props) => props.theme.success};
-    height: 150px;
-    width: 200px;
-    border-radius: 50%;
-  }
   &:hover {
     color: ${({theme}) => theme.light};
-  }
-  &:before {
-    top: 100%;
-    left: 100%;
-    transition: all .7s;
-  }
-  &:hover:before {
-    top: -30px;
-    left: -30px;
-  }
-  &:active:before {
-    background: ${({theme}) => theme.success};
     filter: brightness(.9);
-    transition: background 0s;
+  }
+  &:active {
+    transform: scale(.99);
   }
 `
 
