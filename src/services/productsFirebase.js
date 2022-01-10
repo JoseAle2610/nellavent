@@ -11,8 +11,11 @@ export const addProduct = async (data) => {
 
 export const fetchProducts = async () => {
   try {
-    const docs = getDocs(collection(bd, 'products'))
-    return docs
+    const {docs} = await getDocs(collection(bd, 'products'))
+    return docs.map(e => ({
+      id: e.id,
+      ...e.data()
+    }))
   } catch (e) {
     console.log(e)
   }

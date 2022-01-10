@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react'
-import {fetchProducts, addProduct, editProduct} from 'services/products'
-//import {fetchProducts} from 'services/productsFirebase'
+//import {fetchProducts, addProduct, editProduct} from 'services/products'
+import {fetchProducts} from 'services/productsFirebase'
 import {Container} from 'components/Container'
 import {Card} from 'components/Card'
 import {Form} from 'components/Form'
@@ -66,11 +66,11 @@ export const Products = () => {
     if (!product.price === 0) return console.log('todo mal')
 
     if (!editMode) {
-      addProduct(product)
-        .then(res => (res))
+      //addProduct(product)
+        //.then(res => (res))
     } else {
-      editProduct(product.id, product)
-        .then(res => setProducts(res))
+      //editProduct(product.id, product)
+        //.then(res => setProducts(res))
       setEditMode(false)
     }
     setProduct(productInitialState)
@@ -78,8 +78,8 @@ export const Products = () => {
   }
 
   useEffect(() => {
-    //fetchProducts().then(res => console.log(res))
     fetchProducts().then(setProducts)
+    //fetchProducts().then(setProducts)
     inputProductName.current.focus()
   }, [])
   return (
