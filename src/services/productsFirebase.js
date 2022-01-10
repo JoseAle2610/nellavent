@@ -1,22 +1,23 @@
 import {bd} from 'services/firebase'
 import {collection, addDoc, getDocs} from 'firebase/firestore'
 
-export const addProduct = async (data) => {
+export const fetchProducts = async () => {
   try {
-    return await addDoc(collection(bd, 'products'), data)
+    const {docs} = await getDocs(collection(bd, 'products'))
+    return docs.map(e => ({
+      ...e.data(),
+      id: e.id,
+    }))
   } catch (e) {
     console.log(e)
   }
 }
 
-export const fetchProducts = async () => {
+export const addProduct = async (data) => {
   try {
-    const {docs} = await getDocs(collection(bd, 'products'))
-    return docs.map(e => ({
-      id: e.id,
-      ...e.data()
-    }))
+    await addDoc(collection(bd, 'products'), data)
+    return await fetchProducts()
   } catch (e) {
-    console.log(e)
+    console.error('error add product', e)
   }
 }
