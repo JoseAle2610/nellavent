@@ -32,6 +32,10 @@ const NavbarLink = styled.li`
   &:hover{
     background-color: rgba(0, 0, 0, .2)
   }
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
 `
 
 export const Navbar = (props) => {
@@ -42,9 +46,9 @@ export const Navbar = (props) => {
           {props.brand}
         </NavbarBrand>
         <NavbarLinks>
-          <NavbarLink>hoal</NavbarLink> 
-          <NavbarLink>hoal</NavbarLink> 
-          <NavbarLink>hoal</NavbarLink> 
+          {props.children.map((e, index) => (
+            <NavbarLink key={index}>{e}</NavbarLink>
+          ))}
         </NavbarLinks>
       </NavbarCenter>
     </NavbarContainer>

@@ -78,16 +78,20 @@ export const Products = () => {
   }
 
   useEffect(() => {
-    fetchProducts().then(setProducts)
-    inputProductName.current.focus()
+    let mounted = true
+    if (mounted) {
+      inputProductName.current.focus()
+      fetchProducts().then(setProducts)
+    }
+    return () => mounted = false
   }, [])
   return (
     <Container as='main' p={1}>
       <Card title='Productos'>
         <Flex>
           <FlexItem size={2}>
-            <h5 style={{marginBottom: '10px'}}>Listado</h5>
             <Table 
+              title='Listado'
               headers={headers}
               data={productTableOptions()}
             />

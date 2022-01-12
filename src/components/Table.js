@@ -21,6 +21,10 @@ const TableHeader = styled.thead`
 export const Table  = (props) => {
   const {headers, data} = props
   return (
+    <>
+    {props.title && 
+    <h5 style={{marginBottom: '10px'}}>{props.title}</h5>
+    }
     <TableContainer>
       <TableHeader>
         <tr>
@@ -39,5 +43,6 @@ export const Table  = (props) => {
         ))}
       </tbody>
     </TableContainer>
+    </>
   )
 }
