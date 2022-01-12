@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
-import {fetchClients, addShopping, getPurchases} from 'services/clientsFirebase'
+import {fetchClients, addPurchase, getPurchases, addPayment, getPayments} from 'services/clientsFirebase'
+import {fetchProducts} from 'services/productsFirebase'
 import {Container} from 'components/Container'
 import {Card} from 'components/Card'
 import {Flex, FlexItem} from 'components/Flex'
@@ -9,39 +10,60 @@ import {Input} from 'components/Input'
 import {Button} from 'components/Button'
 
 export const Clients = () => {
-  const addShoppingInitialState = {
+  const purchaseInitialState = {
     productId: '',
-    cant: 0
+    cant: ''
+  }
+  const paymentInitialState = {
+    ref: '',
+    amount: '',
   }
   const [client, setClient] = useState({})
   const [clients, setClients] = useState([])
-  const [shopping, setShopping] = useState(addShoppingInitialState)
+  const [purchase, setPurchase] = useState(purchaseInitialState)
   const [purchases, setPurchases] = useState([])
+  const [payment, setPayment] = useState(paymentInitialState)
+  const [payments, setPayments] = useState([])
+  const [products, setProducts] = useState([])
 
   const tableOptions = () => {
     return clients.map(e => {
       e.action = <Button onClick={() => {
         setClient(e)
         getPurchases(e.id).then(setPurchases)
-      }}>client</Button>
+        getPayments(e.id).then(setPayments)
+      }}>Cargar detalle</Button>
       return e
     })
   }
 
-  const handelFormShopping = (e) => {
+  const handelFormPurchase = (e) => {
     e.preventDefault()
     console.log('addShopping')
-    addShopping(client.id, shopping).then(res => console.log(res))
+    addPurchase(client.id, purchase).then(res => console.log(res))
   }
-  const handelChangeShopping = (e) => {
-    setShopping(prev => ({
+  const handelChangePurchase= (e) => {
+    setPurchase(prev => ({
       ...prev,
       [e.target.name]: e.target.value,
     }))
   }
-  //ZEoTad6KnCnZRaJTZZfH
+
+  const handelFormPayment = (e) => {
+    e.preventDefault()
+    console.log('addPayments')
+    addPayment(client.id, payment).then(res => console.log(res))
+  }
+  const handelChangePayment = (e) => {
+    setPayment(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
   useEffect(() => {
     fetchClients().then(setClients)
+    fetchProducts().then(setProducts)
   }, [])
 
   return (
@@ -63,45 +85,60 @@ export const Clients = () => {
             <Table 
               title='Compras'
               headers={[
-                {header: 'Producto', reference: 'productId'},
+                {header: 'Producto', reference: 'name'},
                 {header: 'Cantidad', reference: 'cant'}
               ]}
-              data={purchases}
+              data={purchases.map(e => {
+                const product = products.find(item => e.productId === item.id)
+                if (product !== undefined){
+                  e.name = products.find(item => e.productId === item.id).name
+                }
+                return e
+              })}
             />
             <Table
               title='Pagos'
               headers={[
                 {header: 'Monto', reference: 'amount'},
                 {header: 'Referencia', reference: 'ref'},
-                {header: 'Fecha', reference:'date'}
               ]}
-              data={[]}
+              data={payments}
             />
           </FlexItem>
           <FlexItem size={1}>
-            <Form title='Agregar Compra' onSubmit={handelFormShopping}>
-              <Input
-                placeholder='Product id'
+            <Form title='Agregar Compra' onSubmit={handelFormPurchase}>
+              <select
                 name='productId'
-                value={shopping.productId}
-                onChange={handelChangeShopping}
-              />
+                value={purchase.productId}
+                onChange={handelChangePurchase}
+              >
+                <option>Escoje alguna</option>
+                {products.map(e => (
+                  <option key={e.id} value={e.id}>{e.name}</option>
+                ))}
+              </select>
               <Input
                 type='number'
                 placeholder='cantidad'
                 name='cant'
-                value={shopping.cant}
-                onChange={handelChangeShopping}
+                value={purchase.cant}
+                onChange={handelChangePurchase}
               />
               <Button>Guardar Compra</Button>
             </Form>
-            <Form title='Agregar Pago'>
+            <Form title='Agregar Pago' onSubmit={handelFormPayment}>
               <Input
                 type='number'
                 placeholder='Monto'
+                name='amount'
+                value={payment.amount}
+                onChange={handelChangePayment}
               />
               <Input
                 placeholder='Numero de referencia'
+                name='ref'
+                value={payment.ref}
+                onChange={handelChangePayment}
               />
               <Button>Guardar Pago</Button>
             </Form>

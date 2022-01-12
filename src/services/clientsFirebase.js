@@ -13,7 +13,7 @@ export const fetchClients = async () => {
   }
 }
 
-export const addShopping = async (id, data) => {
+export const addPurchase = async (id, data) => {
   try {
     const docRef = doc(bd, 'clients', id)
     const collectionRef = collection(docRef, 'purchases')
@@ -22,7 +22,7 @@ export const addShopping = async (id, data) => {
       created: serverTimestamp()
     })
     console.log('adding data')
-    return await fetchClients()
+    return await getPurchases(id)
   } catch (e) {
     console.log(e)
   }
@@ -31,6 +31,32 @@ export const addShopping = async (id, data) => {
 export const getPurchases = async (id) => {
   try {
     const {docs} = await getDocs(collection(bd, `clients/${id}/purchases`))
+    return docs.map(e => ({
+      ...e.data(),
+      id: e.id
+    }))
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const addPayment = async (id, data) => {
+  try {
+    const docRef = doc(bd, 'clients', id)
+    const collectionRef = collection(docRef, `payments`)
+    await addDoc(collectionRef, {
+      ...data,
+      created: serverTimestamp()
+    })
+    return true
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const getPayments = async (id) => {
+  try {
+    const {docs} = await getDocs(collection(bd, `clients/${id}/payments`))
     return docs.map(e => ({
       ...e.data(),
       id: e.id
